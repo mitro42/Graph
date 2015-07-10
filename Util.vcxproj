@@ -18,6 +18,7 @@
     <ClCompile Include="src\Helper.cpp" />
     <ClCompile Include="src\numerical.cpp" />
     <ClCompile Include="src\Primes.cpp" />
+    <ClCompile Include="src\UnionFind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BigNumberDecSec.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="include\Helper.h" />
     <ClInclude Include="include\numerical.h" />
     <ClInclude Include="include\Primes.h" />
+    <ClInclude Include="include\UnionFind.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9A1114F1-4804-42D6-BA57-FF54A2635AC9}</ProjectGuid>
