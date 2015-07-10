@@ -1,5 +1,5 @@
-#ifndef _PROJECT_EULER_GRAPH_H
-#define _PROJECT_EULER_GRAPH_H
+#ifndef MITRO_UTIL_GRAPH_H
+#define MITRO_UTIL_GRAPH_H
 
 #include <cstdint>
 #include <vector>
@@ -67,4 +67,4 @@ private:
 
 std::vector<std::pair<int64_t, int>> findMinimalPathDijkstra(const Graph &g, int startNode, int endNode);
 
-#endif // _PROJECT_EULER_GRAPH_H
+#endif // MITRO_UTIL_GRAPH_H
