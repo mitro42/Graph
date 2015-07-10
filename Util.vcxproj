@@ -11,21 +11,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\bignumberdecsec.cpp" />
-    <ClCompile Include="src\bignumberdigarr.cpp" />
-    <ClCompile Include="src\PEContinuedFractions.cpp" />
-    <ClCompile Include="src\PEGraph.cpp" />
-    <ClCompile Include="src\PEHelper.cpp" />
-    <ClCompile Include="src\PEMath.cpp" />
+    <ClCompile Include="src\BigNumberDecSec.cpp" />
+    <ClCompile Include="src\BigNumberDigArr.cpp" />
+    <ClCompile Include="src\ContinuedFractions.cpp" />
+    <ClCompile Include="src\Graph.cpp" />
+    <ClCompile Include="src\Helper.cpp" />
+    <ClCompile Include="src\Math.cpp" />
     <ClCompile Include="src\Primes.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\bignumberdecsec.h" />
-    <ClInclude Include="include\bignumberdigarr.h" />
-    <ClInclude Include="include\PEContinuedFraction.h" />
-    <ClInclude Include="include\PEGraph.h" />
-    <ClInclude Include="include\PEHelper.h" />
-    <ClInclude Include="include\PEMath.h" />
+    <ClInclude Include="include\BigNumberDecSec.h" />
+    <ClInclude Include="include\BigNumberDigArr.h" />
+    <ClInclude Include="include\ContinuedFraction.h" />
+    <ClInclude Include="include\Graph.h" />
+    <ClInclude Include="include\Helper.h" />
+    <ClInclude Include="include\Math.h" />
     <ClInclude Include="include\Primes.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
