@@ -42,7 +42,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-x64/
+obj/
 
 *.obj
 *.lib
