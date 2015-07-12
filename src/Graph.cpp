@@ -81,6 +81,23 @@ void Graph::clear()
 }
 
 
+std::vector<GraphEdge> Graph::getEdges() const
+{
+    std::vector<GraphEdge> ret;
+    for (size_t nodeIdx = 0; nodeIdx < nodes.size(); ++nodeIdx)
+    {
+        auto &node = nodes[nodeIdx];
+        for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+        {
+            if (directed || node.getNeighbor(neighborIdx) >= nodeIdx)
+            {
+                ret.emplace_back(node.getEdgeWeight(neighborIdx), nodeIdx, node.getNeighbor(neighborIdx));
+            }
+        }
+    }
+    return ret;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Graph algorithms
 //////////////////////////////////////////////////////////////////////////////////////////////////////////

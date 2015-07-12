@@ -91,6 +91,8 @@ public:
     bool hasWeightedEdges() const { return weightedEdges; }
     void setWeightedEdges(bool weighted) { weightedEdges = weighted; }
 
+    std::vector<GraphEdge> getEdges() const;
+
     void clear();
 private:
 	bool directed;
