@@ -24,8 +24,11 @@
     <ClCompile Include="src\ContinuedFractions.cpp" />
     <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\Helper.cpp" />
+    <ClCompile Include="src\mstKruskal.cpp" />
+    <ClCompile Include="src\mstPrim.cpp" />
     <ClCompile Include="src\numerical.cpp" />
     <ClCompile Include="src\Primes.cpp" />
+    <ClCompile Include="src\shortestPathDijkstra.cpp" />
     <ClCompile Include="src\UnionFind.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -89,23 +92,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetName>$(ProjectName)-d</TargetName>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\include</IncludePath>
-    <OutDir>$(SolutionDir)lib\$(Platform)</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)-d</TargetName>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\include</IncludePath>
-    <OutDir>$(SolutionDir)lib\$(Platform)</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\include</IncludePath>
-    <OutDir>$(SolutionDir)lib\$(Platform)</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\include</IncludePath>
-    <OutDir>$(SolutionDir)lib\$(Platform)</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Platform)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

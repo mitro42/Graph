@@ -29,7 +29,7 @@ public:
 	std::vector<int>::iterator begin() { return neighbors.begin(); }
 	std::vector<int>::iterator end() { return neighbors.end(); }
 
-    int getNeighbor(int idx) const { return neighbors[idx]; }
+    int getNeighbor(size_t idx) const { return neighbors[idx]; }
 
     double getEdgeWeight(int idx) const { return edgeWeights[idx]; }
     double getEdgeWeight(const std::vector<int>::iterator &it) const { return *(edgeWeights.begin() + (it - neighbors.begin())); }
@@ -103,20 +103,43 @@ private:
 };
 
 
+std::istream &operator>>(std::istream &is, Graph &g);
+std::ostream &operator<<(std::ostream &os, const Graph &g);
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Graph algorithms
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 std::vector<std::pair<double, int>> nodeWeightDijkstra(const Graph &g, int startNode, int endNode);
 std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int startNode, int endNode);
 
 std::vector<GraphEdge> mstPrim(const Graph &g, int startNode);
 std::vector<GraphEdge> mstKruskal(const Graph &g);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Algorithms with all intermediate states captured
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace graph_algorithm_capture
+{
+
 // Returns a vector of states of the search. First of the pair is the 
 // states = edgeWeightDijkstraCaptureStates(...)
 // states[i].first == the current best paths as in the original result of edgeWeightDijkstra
 // states[i].second == the open node set (q) during the run after the i-th step
-std::vector<std::pair<std::vector<std::pair<double, int>>, std::set<std::pair<double, int>>>>
-    edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode);
 
-std::istream &operator>>(std::istream &is, Graph &g);
-std::ostream &operator<<(std::ostream &os, const Graph &g);
+std::vector<std::pair<std::vector<std::pair<double, int>>, std::set<std::pair<double, int>>>>
+edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode);
+
+std::vector<GraphEdge> mstKruskalCaptureState(const Graph &g);
+
+struct MstPrimState
+{
+    std::vector<GraphEdge> mst;
+    std::set<GraphEdge> edges;
+    MstPrimState(const std::vector<GraphEdge> &mst, const std::set<GraphEdge> &edges) : mst(mst), edges(edges) {}
+};
+
+std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode);
+} // graph_algorithm_capture
 
 #endif // MITRO_UTIL_GRAPH_H
