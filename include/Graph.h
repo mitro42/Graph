@@ -126,8 +126,17 @@ namespace graph_algorithm_capture
 // states = edgeWeightDijkstraCaptureStates(...)
 // states[i].first == the current best paths as in the original result of edgeWeightDijkstra
 // states[i].second == the open node set (q) during the run after the i-th step
+struct ShortestPathEdgeWeightDijkstraState
+{
+    std::vector<std::pair<double, int>> path;
+    std::set<std::pair<double, int>> openNodes;
+    ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, int>> &path, const std::set<std::pair<double, int>> &openNodes) :
+        path(path),
+        openNodes(openNodes)
+    {}
+};
 
-std::vector<std::pair<std::vector<std::pair<double, int>>, std::set<std::pair<double, int>>>>
+std::vector<ShortestPathEdgeWeightDijkstraState>
 edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode);
 
 std::vector<GraphEdge> mstKruskalCaptureState(const Graph &g);

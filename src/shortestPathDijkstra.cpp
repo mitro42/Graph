@@ -83,10 +83,10 @@ std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int start
 
 namespace graph_algorithm_capture
 {
-std::vector<std::pair<std::vector<std::pair<double, int>>, std::set<std::pair<double, int>>>>
+std::vector<ShortestPathEdgeWeightDijkstraState>
     edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode)
 {
-        std::vector<std::pair<std::vector<std::pair<double, int>>, std::set<std::pair<double, int>>>> states;
+        std::vector<ShortestPathEdgeWeightDijkstraState> states;
         std::vector<std::pair<double, int>> shortestRoute(g.getNodeCount(), std::make_pair(std::numeric_limits<double>::max(), -1));
         if (g.getNodeCount() == 0)
             return states;
