@@ -62,23 +62,27 @@ std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode)
         return states;
     std::vector<bool> visited(g.getNodeCount(), false);
     std::set<GraphEdge> edges;
+    const GraphEdge noEdge(0.0, -1, -1);
 
-    states.emplace_back(mst, edges);
+    states.emplace_back(mst, visited, noEdge, edges);
 
     visited[startNode] = true;
     const auto &node = g.getNode(startNode);
     for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
     {
-        edges.emplace(node.getEdgeWeight(neighborIdx), startNode, node.getNeighbor(neighborIdx));
+        GraphEdge currentEdge(node.getEdgeWeight(neighborIdx), startNode, node.getNeighbor(neighborIdx));
+        edges.emplace(currentEdge);
+        states.emplace_back(mst, visited, currentEdge, edges);
+        states.emplace_back(mst, visited, noEdge, edges);
     }
     int nodeCount = 1;
-    states.emplace_back(mst, edges);
 
     while (nodeCount != g.getNodeCount() && !edges.empty())
     {
         GraphEdge nextEdge = *edges.begin();
         edges.erase(edges.begin());
-        states.emplace_back(mst, edges);
+        states.emplace_back(mst, visited, nextEdge, edges);
+        states.emplace_back(mst, visited, noEdge, edges);
         if (visited[nextEdge.from] && visited[nextEdge.to])
             continue;
         if (!visited[nextEdge.from] && !visited[nextEdge.to])
@@ -88,18 +92,23 @@ std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode)
         if (visited[newNode])
             newNode = nextEdge.to;
         mst.push_back(nextEdge);
+        states.pop_back();  // remove the state when the edge is already removed from edges and not yet added to mst
+        states.emplace_back(mst, visited, noEdge, edges);
         visited[newNode] = true;
         const auto &node = g.getNode(newNode);
         for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
-        {
+        {            
             int otherEnd = node.getNeighbor(neighborIdx);
             if (visited[otherEnd])
                 continue;
-            edges.emplace(node.getEdgeWeight(neighborIdx), newNode, otherEnd);
+            GraphEdge currentEdge(node.getEdgeWeight(neighborIdx), newNode, otherEnd);
+            edges.emplace(currentEdge);
+            states.emplace_back(mst, visited, currentEdge, edges);
+            states.emplace_back(mst, visited, noEdge, edges);
         }
         nodeCount++;
     }
-
+    states.emplace_back(mst, visited, GraphEdge(0.0, -1, -1), std::set<GraphEdge>());
     return states;
 }
 

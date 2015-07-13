@@ -135,8 +135,15 @@ std::vector<GraphEdge> mstKruskalCaptureState(const Graph &g);
 struct MstPrimState
 {
     std::vector<GraphEdge> mst;
+    std::vector<bool> visited;
+    GraphEdge inspectedEdge;
     std::set<GraphEdge> edges;
-    MstPrimState(const std::vector<GraphEdge> &mst, const std::set<GraphEdge> &edges) : mst(mst), edges(edges) {}
+    MstPrimState(const std::vector<GraphEdge> &mst, const std::vector<bool> &visited, const GraphEdge &inspectedEdge, const std::set<GraphEdge> &edges): 
+        mst(mst), 
+        visited(visited), 
+        inspectedEdge(inspectedEdge),
+        edges(edges) 
+    {}
 };
 
 std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode);
