@@ -13,21 +13,21 @@ std::vector<GraphEdge> mstKruskal(const Graph &g)
         return mst;
 
     UnionFind uf(int(g.getNodeCount()));
-    std::set<GraphEdge> edges;
+    std::vector<GraphEdge> edges;
 
     for (size_t idx = 0; idx < g.getNodeCount(); ++idx)
     {
         auto &node = g.getNode(idx);
         for (size_t neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
         {
-            edges.emplace(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
+            edges.emplace_back(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
         }
     }
+    std::sort(begin(edges), end(edges), [](const GraphEdge &l, const GraphEdge &r) { return l.weight < r.weight; });
 
-    while (!edges.empty())
+    for (int i = 0; i < edges.size(); ++i)
     {
-        GraphEdge nextEdge = *edges.begin();
-        edges.erase(edges.begin());
+        GraphEdge &nextEdge = edges[i];
         if (uf.same(nextEdge.from, nextEdge.to))
             continue;
 
