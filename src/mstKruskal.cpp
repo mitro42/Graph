@@ -1,6 +1,7 @@
 #include "Graph.h"
 #include "UnionFind.h"
 
+#include <algorithm>
 
 /////////////////////////////////////////////////////
 //  KRUSKAL'S MINIMUM SPANNING TREE 
@@ -24,8 +25,8 @@ std::vector<GraphEdge> mstKruskal(const Graph &g)
         }
     }
     std::sort(begin(edges), end(edges), [](const GraphEdge &l, const GraphEdge &r) { return l.weight < r.weight; });
-
-    for (int i = 0; i < edges.size(); ++i)
+    
+    for (size_t i = 0; i < edges.size(); ++i)
     {
         GraphEdge &nextEdge = edges[i];
         if (uf.same(nextEdge.from, nextEdge.to))
@@ -42,36 +43,44 @@ std::vector<GraphEdge> mstKruskal(const Graph &g)
 namespace graph_algorithm_capture
 {
 
-std::vector<GraphEdge> mstKruskalCaptureStates(const Graph &g)
+std::vector<MstKruskalState> mstKruskalCaptureStates(const Graph &g)
 {
+    std::vector<MstKruskalState> states;
+    const GraphEdge noEdge(0.0, -1, -1);
+
     std::vector<GraphEdge> mst;
     if (g.getNodeCount() == 0)
-        return mst;
+        return states;
 
     UnionFind uf(int(g.getNodeCount()));
-    std::set<GraphEdge> edges;
+    std::vector<GraphEdge> edges;
+    states.emplace_back(mst, edges, uf, noEdge);
 
     for (size_t idx = 0; idx < g.getNodeCount(); ++idx)
     {
         auto &node = g.getNode(idx);
         for (size_t neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
         {
-            edges.emplace(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
+            edges.emplace_back(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
         }
     }
-
+    std::sort(begin(edges), end(edges), [](const GraphEdge &l, const GraphEdge &r) { return l.weight < r.weight; });
+    
+    states.emplace_back(mst, edges, uf, noEdge);
     while (!edges.empty())
-    {
-        GraphEdge nextEdge = *edges.begin();
+    {        
+        GraphEdge &nextEdge = edges[0];
         edges.erase(edges.begin());
+        states.emplace_back(mst, edges, uf, nextEdge);
         if (uf.same(nextEdge.from, nextEdge.to))
             continue;
 
         uf.join(nextEdge.from, nextEdge.to);
         mst.push_back(nextEdge);
     }
+    states.emplace_back(mst, edges, uf, noEdge);
 
-    return mst;
+    return states;
 }
 
 } //namespace graph_algorithm_capture

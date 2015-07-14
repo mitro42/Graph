@@ -1,6 +1,6 @@
 #ifndef MITRO_UTIL_GRAPH_H
 #define MITRO_UTIL_GRAPH_H
-
+#include "UnionFind.h"
 #include <cstdint>
 #include <vector>
 #include <set>
@@ -122,10 +122,6 @@ std::vector<GraphEdge> mstKruskal(const Graph &g);
 namespace graph_algorithm_capture
 {
 
-// Returns a vector of states of the search. First of the pair is the 
-// states = edgeWeightDijkstraCaptureStates(...)
-// states[i].first == the current best paths as in the original result of edgeWeightDijkstra
-// states[i].second == the open node set (q) during the run after the i-th step
 struct ShortestPathEdgeWeightDijkstraState
 {
     std::vector<std::pair<double, int>> path;
@@ -139,7 +135,25 @@ struct ShortestPathEdgeWeightDijkstraState
 std::vector<ShortestPathEdgeWeightDijkstraState>
 edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode);
 
-std::vector<GraphEdge> mstKruskalCaptureState(const Graph &g);
+
+
+struct MstKruskalState
+{
+    std::vector<GraphEdge> mst;
+    std::vector<GraphEdge> edges;
+    UnionFind uf;
+    GraphEdge inspectedEdge;
+    MstKruskalState(const std::vector<GraphEdge> mst, const std::vector<GraphEdge> &edges, const UnionFind &uf, const GraphEdge &inspectedEdge) :
+        mst(mst),
+        edges(edges),
+        uf(uf),
+        inspectedEdge(inspectedEdge)
+    {}
+};
+
+std::vector<MstKruskalState> mstKruskalCaptureStates(const Graph &g);
+
+
 
 struct MstPrimState
 {
