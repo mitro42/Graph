@@ -29,7 +29,7 @@ public:
 	std::vector<int>::iterator begin() { return neighbors.begin(); }
 	std::vector<int>::iterator end() { return neighbors.end(); }
 
-    int getNeighbor(size_t idx) const { return neighbors[idx]; }
+    int getNeighbor(int idx) const { return neighbors[idx]; }
 
     double getEdgeWeight(int idx) const { return edgeWeights[idx]; }
     double getEdgeWeight(const std::vector<int>::iterator &it) const { return *(edgeWeights.begin() + (it - neighbors.begin())); }
@@ -37,7 +37,7 @@ public:
     void setEdgeWeight(int idx, double w) { edgeWeights[idx] = w; }
     void setEdgeWeight(const std::vector<int>::iterator &it, double w) { (*(edgeWeights.begin() + (it - neighbors.begin()))) = w; }
 
-    size_t getNeighborCount() const { return neighbors.size(); }
+    int getNeighborCount() const { return int(neighbors.size()); }
 private:
 	void removeNeighbor(int to);
 	void addNeighbor(int to, double weight = 0.0);
@@ -77,10 +77,10 @@ public:
     std::vector<GraphNode>::iterator begin() { return nodes.begin(); }
     std::vector<GraphNode>::iterator end() { return nodes.end(); }
 
-	void resize(size_t newNodes);
+	void resize(int newNodes);
 	GraphNode &getNode(int idx) { return nodes[idx]; }
 	const GraphNode &getNode(int idx) const { return nodes[idx]; }
-	size_t getNodeCount() const { return nodes.size(); }
+	int getNodeCount() const { return int(nodes.size()); }
 
     bool isDirected() const { return directed; }
     void setDirected(bool d) { directed = d; }

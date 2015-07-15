@@ -16,10 +16,10 @@ std::vector<GraphEdge> mstKruskal(const Graph &g)
     UnionFind uf(int(g.getNodeCount()));
     std::vector<GraphEdge> edges;
 
-    for (size_t idx = 0; idx < g.getNodeCount(); ++idx)
+    for (int idx = 0; idx < g.getNodeCount(); ++idx)
     {
         auto &node = g.getNode(idx);
-        for (size_t neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+        for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
         {
             edges.emplace_back(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
         }
@@ -56,10 +56,10 @@ std::vector<MstKruskalState> mstKruskalCaptureStates(const Graph &g)
     std::vector<GraphEdge> edges;
     states.emplace_back(mst, edges, uf, noEdge);
 
-    for (size_t idx = 0; idx < g.getNodeCount(); ++idx)
+    for (int idx = 0; idx < g.getNodeCount(); ++idx)
     {
         auto &node = g.getNode(idx);
-        for (size_t neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+        for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
         {
             edges.emplace_back(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
         }

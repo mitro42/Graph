@@ -36,9 +36,9 @@ void GraphNode::addNeighbor(int to, double weight)
 //   Graph
 /////////////////////////////////////////////////////
 
-void Graph::resize(size_t newNodes)
+void Graph::resize(int newNodes)
 {
-    if (newNodes < nodes.size())
+    if (newNodes < int(nodes.size()))
         throw("Graph::resize - cannot decrease size");
 
     if (newNodes == nodes.size())
@@ -86,11 +86,11 @@ std::vector<GraphEdge> Graph::getEdges() const
     for (size_t nodeIdx = 0; nodeIdx < nodes.size(); ++nodeIdx)
     {
         auto &node = nodes[nodeIdx];
-        for (size_t neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+        for (size_t neighborIdx = 0; neighborIdx < node.neighbors.size(); ++neighborIdx)
         {
-            if (directed || node.getNeighbor(neighborIdx) >= nodeIdx)
+            if (directed || node.neighbors[neighborIdx] >= int(nodeIdx))
             {
-                ret.emplace_back(node.getEdgeWeight(neighborIdx), int(nodeIdx), node.getNeighbor(neighborIdx));
+                ret.emplace_back(node.edgeWeights[neighborIdx], int(nodeIdx), node.neighbors[neighborIdx]);
             }
         }
     }
@@ -197,10 +197,10 @@ std::ostream &operator<<(std::ostream &os, const Graph &g)
         }
     }
 
-    for (size_t nodeIdx = 0; nodeIdx < g.getNodeCount(); ++nodeIdx)
+    for (int nodeIdx = 0; nodeIdx < g.getNodeCount(); ++nodeIdx)
     {
         auto &node = g.getNode(nodeIdx);
-        for (size_t i = 0; i < node.getNeighborCount(); ++i)
+        for (int i = 0; i < node.getNeighborCount(); ++i)
         {
             if (g.isDirected() || nodeIdx < node.getNeighbor(i))
             {
