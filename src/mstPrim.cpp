@@ -9,6 +9,8 @@ std::vector<GraphEdge> mstPrim(const Graph &g, int startNode)
     std::vector<GraphEdge> mst;
     if (g.getNodeCount() == 0)
         return mst;
+    if (startNode < 0)
+        startNode = 0;
 
     std::vector<bool> visited(g.getNodeCount(), false);
     std::set<GraphEdge> edges;
