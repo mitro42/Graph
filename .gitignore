@@ -44,6 +44,7 @@ Temporary Items
 
 obj/
 
+
 *.obj
 *.lib
 *.ilk
@@ -55,6 +56,9 @@ obj/
 *.filters
 *.vcxproj.filters
 *.vcxproj.user
+*.pch
+*.tlog
+*.lastbuildstate
 
 *.o
 *.swp
