@@ -19,8 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BigNumberDecSec.cpp" />
-    <ClCompile Include="src\BigNumberDigArr.cpp" />
+    <ClCompile Include="src\BigInt.cpp" />
     <ClCompile Include="src\ContinuedFractions.cpp" />
     <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\Helper.cpp" />
@@ -32,8 +31,7 @@
     <ClCompile Include="src\UnionFind.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\BigNumberDecSec.h" />
-    <ClInclude Include="include\BigNumberDigArr.h" />
+    <ClInclude Include="include\BigInt.h" />
     <ClInclude Include="include\ContinuedFraction.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\Helper.h" />
