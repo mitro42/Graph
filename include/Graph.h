@@ -126,9 +126,16 @@ struct ShortestPathEdgeWeightDijkstraState
 {
     std::vector<std::pair<double, int>> path;
     std::set<std::pair<double, int>> openNodes;
-    ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, int>> &path, const std::set<std::pair<double, int>> &openNodes) :
+    int inspectedNode;
+    GraphEdge inspectedEdge;
+    ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, int>> &path, 
+        const std::set<std::pair<double, int>> &openNodes, 
+        int inspectedNode,
+        GraphEdge inspectedEdge) :
         path(path),
-        openNodes(openNodes)
+        openNodes(openNodes),
+        inspectedNode(inspectedNode),
+        inspectedEdge(inspectedEdge)
     {}
 };
 

@@ -26,7 +26,6 @@ std::vector<std::pair<double, int>> nodeWeightDijkstra(const Graph &g, int start
 
         for (auto &neighbor : g.getNode(u))
         {
-            std::vector<std::pair<int64_t, int>> removedElements;
             double newValue = shortestRoute[u].first + g.getNode(neighbor).getWeight();
             if (newValue < shortestRoute[neighbor].first)
             {
@@ -66,7 +65,6 @@ std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int start
         for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
         {
             auto neighbor = node.getNeighbor(neighborIdx);
-            std::vector<std::pair<int64_t, int>> removedElements;
             double newValue = shortestRoute[u].first + node.getEdgeWeight(neighborIdx);
             if (newValue < shortestRoute[neighbor].first)
             {
@@ -87,6 +85,7 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
     edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode)
 {
         std::vector<ShortestPathEdgeWeightDijkstraState> states;
+        const GraphEdge noEdge(0.0, -1, -1);
         std::vector<std::pair<double, int>> shortestRoute(g.getNodeCount(), std::make_pair(std::numeric_limits<double>::max(), -1));
         if (g.getNodeCount() == 0)
             return states;
@@ -96,7 +95,7 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
         std::set<std::pair<double, int>> q;
 
         q.insert(std::make_pair(0, startNode));
-
+        states.emplace_back(shortestRoute, q, startNode, noEdge);
         int u = startNode;
         while (!q.empty())
         {
@@ -108,20 +107,21 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
             for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
             {
                 auto neighbor = node.getNeighbor(neighborIdx);
-                std::vector<std::pair<int64_t, int>> removedElements;
-                double newValue = shortestRoute[u].first + node.getEdgeWeight(neighborIdx);
+                double weight = node.getEdgeWeight(neighborIdx);
+                double newValue = shortestRoute[u].first + weight;
                 if (newValue < shortestRoute[neighbor].first)
-                {
-                    states.emplace_back(shortestRoute, q);
+                {   
+                    states.emplace_back(shortestRoute, q, u, GraphEdge(NAN, shortestRoute[neighbor].second, neighbor));
                     q.erase(std::make_pair(shortestRoute[neighbor].first, neighbor));
                     q.insert(std::make_pair(newValue, neighbor));
                     shortestRoute[neighbor].first = newValue;
                     shortestRoute[neighbor].second = u;
+                    states.emplace_back(shortestRoute, q, u, GraphEdge(NAN, u, neighbor));
                 }
-            }
-            states.emplace_back(shortestRoute, q);
+            }            
             q.erase(begin(q));
         }
+        states.emplace_back(shortestRoute, q, -1, noEdge);
         return states;
     }
 
