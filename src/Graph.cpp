@@ -205,12 +205,12 @@ std::ostream &operator<<(std::ostream &os, const Graph &g)
             if (g.isDirected() || nodeIdx < node.getNeighbor(i))
             {
                 os << nodeIdx + 1 << " " << node.getNeighbor(i) + 1;
+                if (g.hasWeightedEdges())
+                {
+                    os << " " << node.getEdgeWeight(int(i));
+                }
+                os << "\n";
             }
-            if (g.hasWeightedEdges())
-            {
-                os << " " << node.getEdgeWeight(int(i));
-            }
-            os << "\n";
         }
     }
 
