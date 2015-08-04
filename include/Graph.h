@@ -166,12 +166,12 @@ struct MstPrimState
 {
     std::vector<GraphEdge> mst;
     std::vector<bool> visited;
-    GraphEdge inspectedEdge;
+    std::vector<GraphEdge> inspectedEdges;
     std::set<GraphEdge> edges;
-    MstPrimState(const std::vector<GraphEdge> &mst, const std::vector<bool> &visited, const GraphEdge &inspectedEdge, const std::set<GraphEdge> &edges): 
+    MstPrimState(const std::vector<GraphEdge> &mst, const std::vector<bool> &visited, const std::vector<GraphEdge> &inspectedEdges, const std::set<GraphEdge> &edges) :
         mst(mst), 
         visited(visited), 
-        inspectedEdge(inspectedEdge),
+        inspectedEdges(inspectedEdges),
         edges(edges) 
     {}
 };

@@ -64,27 +64,29 @@ std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode)
         return states;
     std::vector<bool> visited(g.getNodeCount(), false);
     std::set<GraphEdge> edges;
-    const GraphEdge noEdge(0.0, -1, -1);
+    const std::vector<GraphEdge> noEdges;
 
-    states.emplace_back(mst, visited, noEdge, edges);
+    states.emplace_back(mst, visited, noEdges, edges);
 
     visited[startNode] = true;
     const auto &node = g.getNode(startNode);
+    std::vector<GraphEdge> addedEdges;
     for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
     {
         GraphEdge currentEdge(node.getEdgeWeight(neighborIdx), startNode, node.getNeighbor(neighborIdx));
         edges.emplace(currentEdge);
-        states.emplace_back(mst, visited, currentEdge, edges);
-        states.emplace_back(mst, visited, noEdge, edges);
+        addedEdges.push_back(currentEdge);
     }
+    states.emplace_back(mst, visited, addedEdges, edges);
+    states.emplace_back(mst, visited, noEdges, edges);
     int nodeCount = 1;
 
     while (nodeCount != g.getNodeCount() && !edges.empty())
     {
         GraphEdge nextEdge = *edges.begin();
         edges.erase(edges.begin());
-        states.emplace_back(mst, visited, nextEdge, edges);
-        states.emplace_back(mst, visited, noEdge, edges);
+        states.emplace_back(mst, visited, std::vector<GraphEdge>{nextEdge}, edges);
+        states.emplace_back(mst, visited, noEdges, edges);
         if (visited[nextEdge.from] && visited[nextEdge.to])
             continue;
         if (!visited[nextEdge.from] && !visited[nextEdge.to])
@@ -95,9 +97,10 @@ std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode)
             newNode = nextEdge.to;
         mst.push_back(nextEdge);
         states.pop_back();  // remove the state when the edge is already removed from edges and not yet added to mst
-        states.emplace_back(mst, visited, noEdge, edges);
+        states.emplace_back(mst, visited, noEdges, edges);
         visited[newNode] = true;
         const auto &node = g.getNode(newNode);
+        addedEdges.clear();
         for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
         {            
             int otherEnd = node.getNeighbor(neighborIdx);
@@ -105,12 +108,13 @@ std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode)
                 continue;
             GraphEdge currentEdge(node.getEdgeWeight(neighborIdx), newNode, otherEnd);
             edges.emplace(currentEdge);
-            states.emplace_back(mst, visited, currentEdge, edges);
-            states.emplace_back(mst, visited, noEdge, edges);
+            addedEdges.push_back(currentEdge);
         }
+        states.emplace_back(mst, visited, addedEdges, edges);
+        states.emplace_back(mst, visited, noEdges, edges);
         nodeCount++;
     }
-    states.emplace_back(mst, visited, GraphEdge(0.0, -1, -1), std::set<GraphEdge>());
+    states.emplace_back(mst, visited, noEdges, std::set<GraphEdge>());
     return states;
 }
 
