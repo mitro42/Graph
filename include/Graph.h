@@ -83,7 +83,6 @@ public:
 	int getNodeCount() const { return int(nodes.size()); }
 
     bool isDirected() const { return directed; }
-    void setDirected(bool d) { directed = d; }
 
     bool hasWeightedNodes() const { return weightedNodes; }
     void setWeightedNodes(bool weighted) { weightedNodes = weighted; }
@@ -93,7 +92,7 @@ public:
 
     std::vector<GraphEdge> getEdges() const;
 
-    void clear();
+    void clear(bool newDirected);
 private:
 	bool directed;
     bool weightedNodes;

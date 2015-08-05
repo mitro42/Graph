@@ -74,8 +74,9 @@ void Graph::removeEdge(int from, int to)
     }
 }
 
-void Graph::clear()
+void Graph::clear(bool newDirected)
 {
+    directed = newDirected;
     nodes.clear();
 }
 
@@ -129,7 +130,7 @@ std::vector<GraphEdge> Graph::getEdges() const
 
 std::istream &operator>>(std::istream &is, Graph &g)
 {
-    g.clear();
+    
 
     int n, m;
     int directedFlag, weightedNodesFlag, weightedEdgesFlag;
@@ -137,8 +138,9 @@ std::istream &operator>>(std::istream &is, Graph &g)
     is >> n >> m;
     is >> directedFlag >> weightedNodesFlag >> weightedEdgesFlag;
 
+    g.clear(directedFlag != 0);
     g.resize(n);
-    g.setDirected(directedFlag != 0);
+    
     g.setWeightedNodes(weightedNodesFlag != 0);
     g.setWeightedEdges(weightedEdgesFlag != 0);
 
