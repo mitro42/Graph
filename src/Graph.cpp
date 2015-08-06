@@ -12,7 +12,7 @@
 //  Node of Graph
 /////////////////////////////////////////////////////
 
-
+/*
 void GraphNode::removeNeighbor(int to)
 {
     auto neighborIt = std::find(neighbors.begin(), neighbors.end(), to);
@@ -31,6 +31,7 @@ void GraphNode::addNeighbor(int to, double weight)
     edgeWeights.insert(edgeWeights.begin() + (it - neighbors.begin()), weight);
     neighbors.insert(it, to);
 }
+*/
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //   Graph
@@ -50,16 +51,19 @@ void Graph::resize(int newNodes)
 
 int Graph::addNode(double weight)
 {
-    nodes.emplace_back(weight);
+    nodes.emplace_back(std::make_shared<GraphNode>(weight));
     return int(nodes.size()) - 1;
 }
 
 void Graph::addEdge(int from, int to, double weight)
 {
-    nodes[from].addNeighbor(to, weight);
+    auto newEdge = std::make_shared<GraphEdge>(weight, from, to);
+    edges.push_back(newEdge);
+
+    nodes[from]->addEdge(newEdge);
     if (!directed)
     {
-        nodes[to].addNeighbor(from, weight);
+        nodes[to]->addEdge(newEdge);
 
     }
 }
@@ -67,10 +71,14 @@ void Graph::addEdge(int from, int to, double weight)
 
 void Graph::removeEdge(int from, int to)
 {
-    nodes[from].removeNeighbor(to);
+    auto edge = std::find_if(edges.begin(), edges.end(),
+        [&from, &to](const std::shared_ptr<GraphEdge> &e) { return e->from == from && e->to == to; });
+    edges.erase(edge, edges.end());
+
+    nodes[from]->removeEdge(*edge);
     if (!directed)
     {
-        nodes[to].removeNeighbor(from);
+        nodes[to]->removeEdge(*edge);
     }
 }
 
@@ -81,22 +89,6 @@ void Graph::clear(bool newDirected)
 }
 
 
-std::vector<GraphEdge> Graph::getEdges() const
-{
-    std::vector<GraphEdge> ret;
-    for (size_t nodeIdx = 0; nodeIdx < nodes.size(); ++nodeIdx)
-    {
-        auto &node = nodes[nodeIdx];
-        for (size_t neighborIdx = 0; neighborIdx < node.neighbors.size(); ++neighborIdx)
-        {
-            if (directed || node.neighbors[neighborIdx] >= int(nodeIdx))
-            {
-                ret.emplace_back(node.edgeWeights[neighborIdx], int(nodeIdx), node.neighbors[neighborIdx]);
-            }
-        }
-    }
-    return ret;
-}
 
 /////////////////////////////////////////////////////
 //  Input / Output
@@ -150,7 +142,7 @@ std::istream &operator>>(std::istream &is, Graph &g)
         {
             double w;
             is >> w;
-            node.setWeight(w);
+            node->setWeight(w);
         }
     }
 
@@ -175,44 +167,23 @@ std::ostream &operator<<(std::ostream &os, const Graph &g)
 
     size_t edgesCount = 0;
 
-    for (auto &node : g)
-    {
-        edgesCount += node.getNeighborCount();
-    }
-
-    if (g.isDirected())
-    {
-        os << edgesCount << "\n";
-    }
-    else
-    {
-        os << edgesCount / 2 << "\n";
-    }
-
+    os << g.edges.size() << "\n";
     os << g.isDirected() << " " << g.hasWeightedNodes() << " " << g.hasWeightedEdges() << "\n";
 
     if (g.hasWeightedNodes())
     {
-        for (auto &node : g)
+        for (const auto &node : g.nodes)
         {
-            os << node.getWeight() << "\n";
+            os << node->getWeight() << "\n";
         }
     }
 
-    for (int nodeIdx = 0; nodeIdx < g.getNodeCount(); ++nodeIdx)
+    for (const auto &edge : g.edges)
     {
-        auto &node = g.getNode(nodeIdx);
-        for (int i = 0; i < node.getNeighborCount(); ++i)
+        os << edge->from + 1 << " " << edge->to + 1;
+        if (g.hasWeightedEdges())
         {
-            if (g.isDirected() || nodeIdx < node.getNeighbor(i))
-            {
-                os << nodeIdx + 1 << " " << node.getNeighbor(i) + 1;
-                if (g.hasWeightedEdges())
-                {
-                    os << " " << node.getEdgeWeight(int(i));
-                }
-                os << "\n";
-            }
+            os << " " << edge->weight;
         }
     }
 
