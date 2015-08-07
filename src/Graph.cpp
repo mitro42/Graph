@@ -45,7 +45,10 @@ void Graph::resize(int newNodes)
     if (newNodes == nodes.size())
         return;
 
-    nodes.resize(newNodes);
+    while (nodes.size() < newNodes)
+    {
+        nodes.push_back(std::make_shared<GraphNode>());
+    }
 }
 
 

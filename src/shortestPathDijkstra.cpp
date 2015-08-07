@@ -4,7 +4,7 @@
 //  DIJKSTRA'S SHORTEST PATH
 /////////////////////////////////////////////////////
 
-std::vector<std::pair<double, int>> nodeWeightDijkstra(const Graph &g, int startNode, int endNode)
+std::vector<std::pair<double, int>> nodeWeightDijkstra(Graph &g, int startNode, int endNode)
 {
     std::vector<std::pair<double, int>> shortestRoute(g.getNodeCount(), std::make_pair(std::numeric_limits<double>::max(), -1));
     if (g.getNodeCount() == 0)
@@ -24,9 +24,10 @@ std::vector<std::pair<double, int>> nodeWeightDijkstra(const Graph &g, int start
         if (endNode != -1 && u == endNode)
             return shortestRoute;
 
-        for (auto &neighbor : g.getNode(u))
+        for (auto &edgePtr : g.getNode(u))
         {
-            double newValue = shortestRoute[u].first + g.getNode(neighbor).getWeight();
+            double newValue = shortestRoute[u].first + edgePtr->weight;
+            int neighbor = edgePtr->otherEnd(u);
             if (newValue < shortestRoute[neighbor].first)
             {
                 q.erase(std::make_pair(shortestRoute[neighbor].first, neighbor));
@@ -42,7 +43,7 @@ std::vector<std::pair<double, int>> nodeWeightDijkstra(const Graph &g, int start
 
 
 
-std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int startNode, int endNode)
+std::vector<std::pair<double, int>> edgeWeightDijkstra(Graph &g, int startNode, int endNode)
 {
     std::vector<std::pair<double, int>> shortestRoute(g.getNodeCount(), std::make_pair(std::numeric_limits<double>::max(), -1));
     if (g.getNodeCount() == 0)
@@ -62,10 +63,10 @@ std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int start
         if (endNode != -1 && u == endNode)
             return shortestRoute;
 
-        for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
-        {
-            auto neighbor = node.getNeighbor(neighborIdx);
-            double newValue = shortestRoute[u].first + node.getEdgeWeight(neighborIdx);
+        for (auto &edgePtr : node)
+        {            
+            int neighbor = edgePtr->otherEnd(u);
+            double newValue = shortestRoute[u].first + edgePtr->weight;
             if (newValue < shortestRoute[neighbor].first)
             {
                 q.erase(std::make_pair(shortestRoute[neighbor].first, neighbor));
@@ -82,7 +83,7 @@ std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int start
 namespace graph_algorithm_capture
 {
 std::vector<ShortestPathEdgeWeightDijkstraState>
-    edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode)
+    edgeWeightDijkstraCaptureStates(Graph &g, int startNode, int endNode)
 {
         std::vector<ShortestPathEdgeWeightDijkstraState> states;
         const GraphEdge noEdge(0.0, -1, -1);
@@ -104,10 +105,10 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
             if (endNode != -1 && u == endNode)
                 return states;
 
-            for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+            for (auto &edgePtr : node)
             {
-                auto neighbor = node.getNeighbor(neighborIdx);
-                double weight = node.getEdgeWeight(neighborIdx);
+                int neighbor = edgePtr->otherEnd(u);
+                double weight = edgePtr->weight;
                 double newValue = shortestRoute[u].first + weight;
                 if (newValue < shortestRoute[neighbor].first)
                 {   

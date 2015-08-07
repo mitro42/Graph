@@ -18,6 +18,12 @@ struct GraphEdge
     int to;
     GraphEdge(double weight, int from, int to) : weight(weight), from(from), to(to) {}
     bool operator<(const GraphEdge& other) const { return std::make_tuple(weight, from, to) < std::make_tuple(other.weight, other.from, other.to); }
+    int otherEnd(int oneEnd) const
+    { 
+        if (oneEnd != from && oneEnd != to)
+            throw "Invalid end";
+        return (oneEnd == from) ? to : from;
+    }
 };
 
 
@@ -120,11 +126,11 @@ std::ostream &operator<<(std::ostream &os, const Graph &g);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Graph algorithms
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-std::vector<std::pair<double, int>> nodeWeightDijkstra(const Graph &g, int startNode, int endNode);
-std::vector<std::pair<double, int>> edgeWeightDijkstra(const Graph &g, int startNode, int endNode);
+std::vector<std::pair<double, int>> nodeWeightDijkstra(Graph &g, int startNode, int endNode);
+std::vector<std::pair<double, int>> edgeWeightDijkstra(Graph &g, int startNode, int endNode);
 
-std::vector<GraphEdge> mstPrim(const Graph &g, int startNode);
-std::vector<GraphEdge> mstKruskal(const Graph &g);
+std::vector<GraphEdge> mstPrim(Graph &g, int startNode);
+std::vector<GraphEdge> mstKruskal(Graph &g);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Algorithms with all intermediate states captured
@@ -150,7 +156,7 @@ struct ShortestPathEdgeWeightDijkstraState
 };
 
 std::vector<ShortestPathEdgeWeightDijkstraState>
-edgeWeightDijkstraCaptureStates(const Graph &g, int startNode, int endNode);
+edgeWeightDijkstraCaptureStates(Graph &g, int startNode, int endNode);
 
 
 
@@ -168,7 +174,7 @@ struct MstKruskalState
     {}
 };
 
-std::vector<MstKruskalState> mstKruskalCaptureStates(const Graph &g);
+std::vector<MstKruskalState> mstKruskalCaptureStates(Graph &g);
 
 
 
@@ -186,7 +192,7 @@ struct MstPrimState
     {}
 };
 
-std::vector<MstPrimState> mstPrimCaptureStates(const Graph &g, int startNode);
+std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode);
 } // graph_algorithm_capture
 
 #endif // MITRO_UTIL_GRAPH_H

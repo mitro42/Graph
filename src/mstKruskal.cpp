@@ -7,7 +7,7 @@
 //  KRUSKAL'S MINIMUM SPANNING TREE 
 /////////////////////////////////////////////////////
 
-std::vector<GraphEdge> mstKruskal(const Graph &g)
+std::vector<GraphEdge> mstKruskal(Graph &g)
 {
     std::vector<GraphEdge> mst;
     if (g.getNodeCount() == 0)
@@ -19,9 +19,9 @@ std::vector<GraphEdge> mstKruskal(const Graph &g)
     for (int idx = 0; idx < g.getNodeCount(); ++idx)
     {
         auto &node = g.getNode(idx);
-        for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+        for (auto &edgePtr: node)
         {
-            edges.emplace_back(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
+            edges.emplace_back(*edgePtr);
         }
     }
     std::sort(begin(edges), end(edges), [](const GraphEdge &l, const GraphEdge &r) { return l.weight < r.weight; });
@@ -43,7 +43,7 @@ std::vector<GraphEdge> mstKruskal(const Graph &g)
 namespace graph_algorithm_capture
 {
 
-std::vector<MstKruskalState> mstKruskalCaptureStates(const Graph &g)
+std::vector<MstKruskalState> mstKruskalCaptureStates(Graph &g)
 {
     std::vector<MstKruskalState> states;
     const GraphEdge noEdge(0.0, -1, -1);
@@ -59,9 +59,9 @@ std::vector<MstKruskalState> mstKruskalCaptureStates(const Graph &g)
     for (int idx = 0; idx < g.getNodeCount(); ++idx)
     {
         auto &node = g.getNode(idx);
-        for (int neighborIdx = 0; neighborIdx < node.getNeighborCount(); ++neighborIdx)
+        for (auto &edgePtr : node)
         {
-            edges.emplace_back(node.getEdgeWeight(neighborIdx), int(idx), node.getNeighbor(neighborIdx));
+            edges.emplace_back(*edgePtr);
         }
     }
     std::sort(begin(edges), end(edges), [](const GraphEdge &l, const GraphEdge &r) { return l.weight < r.weight; });
