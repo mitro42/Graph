@@ -7,6 +7,7 @@
 #include <functional>
 #include <memory>
 #include <set>
+#include <string>
 #include <vector>
 
 class Graph;
@@ -141,17 +142,23 @@ namespace graph_algorithm_capture
 struct ShortestPathEdgeWeightDijkstraState
 {
     std::vector<std::pair<double, int>> path;
-    std::set<std::pair<double, int>> openNodes;
+    std::set<std::pair<double, int>> openNodes; // discovered but not fully processed
+    std::set<std::pair<double, int>> closedNodes; //  fully processed
     int inspectedNode;
     GraphEdge inspectedEdge;
+    std::string description;
     ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, int>> &path, 
-        const std::set<std::pair<double, int>> &openNodes, 
+        const std::set<std::pair<double, int>> &openNodes,
+        const std::set<std::pair<double, int>> &closedNodes,
         int inspectedNode,
-        GraphEdge inspectedEdge) :
+        GraphEdge inspectedEdge, 
+        const std::string &description) :
         path(path),
         openNodes(openNodes),
+        closedNodes(closedNodes),
         inspectedNode(inspectedNode),
-        inspectedEdge(inspectedEdge)
+        inspectedEdge(inspectedEdge),
+        description(description)
     {}
 };
 
