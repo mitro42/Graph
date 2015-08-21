@@ -144,18 +144,21 @@ struct ShortestPathEdgeWeightDijkstraState
     std::vector<std::pair<double, int>> path;
     std::set<std::pair<double, int>> openNodes; // discovered but not fully processed
     std::set<std::pair<double, int>> closedNodes; //  fully processed
+    std::vector<GraphEdge> processedEdges;
     int inspectedNode;
     GraphEdge inspectedEdge;
     std::string description;
     ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, int>> &path, 
         const std::set<std::pair<double, int>> &openNodes,
         const std::set<std::pair<double, int>> &closedNodes,
+        const std::vector<GraphEdge> &processedEdges,
         int inspectedNode,
         GraphEdge inspectedEdge, 
         const std::string &description) :
         path(path),
         openNodes(openNodes),
         closedNodes(closedNodes),
+        processedEdges(processedEdges),
         inspectedNode(inspectedNode),
         inspectedEdge(inspectedEdge),
         description(description)
