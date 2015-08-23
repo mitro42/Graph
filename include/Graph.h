@@ -127,8 +127,8 @@ std::ostream &operator<<(std::ostream &os, const Graph &g);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Graph algorithms
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-std::vector<std::pair<double, int>> nodeWeightDijkstra(Graph &g, int startNode, int endNode);
-std::vector<std::pair<double, int>> edgeWeightDijkstra(Graph &g, int startNode, int endNode);
+std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> nodeWeightDijkstra(Graph &g, int startNode, int endNode);
+std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> edgeWeightDijkstra(Graph &g, int startNode, int endNode);
 
 std::vector<GraphEdge> mstPrim(Graph &g, int startNode);
 std::vector<GraphEdge> mstKruskal(Graph &g);
@@ -141,19 +141,20 @@ namespace graph_algorithm_capture
 
 struct ShortestPathEdgeWeightDijkstraState
 {
-    std::vector<std::pair<double, int>> path;
+    std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> path;
     std::set<std::pair<double, int>> openNodes; // discovered but not fully processed
     std::set<std::pair<double, int>> closedNodes; //  fully processed
-    std::vector<GraphEdge> processedEdges;
+    std::vector<std::shared_ptr<GraphEdge>> processedEdges; // processed, not part of any of the minimal paths
     int inspectedNode;
-    GraphEdge inspectedEdge;
+    std::shared_ptr<GraphEdge> inspectedEdge;
     std::string description;
-    ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, int>> &path, 
+
+    ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> &path,
         const std::set<std::pair<double, int>> &openNodes,
         const std::set<std::pair<double, int>> &closedNodes,
-        const std::vector<GraphEdge> &processedEdges,
+        const std::vector<std::shared_ptr<GraphEdge>> &processedEdges,
         int inspectedNode,
-        GraphEdge inspectedEdge, 
+        std::shared_ptr<GraphEdge> inspectedEdge,
         const std::string &description) :
         path(path),
         openNodes(openNodes),
