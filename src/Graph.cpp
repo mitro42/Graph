@@ -188,6 +188,7 @@ std::ostream &operator<<(std::ostream &os, const Graph &g)
         {
             os << " " << edge->weight;
         }
+        os << "\n";
     }
 
     os << std::flush;
