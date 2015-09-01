@@ -106,7 +106,7 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
     {
         u = begin(q)->second;
         std::string uName = std::to_string(u + 1);
-        states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, noEdge, "Starting processing " + uName);
+        states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, noEdge, "Start processing node " + uName);
         auto &node = g.getNode(u);
         if (endNode != -1 && u == endNode)
             return states;
@@ -120,12 +120,12 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
             {                    
                 states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, noEdge, stepDesc);
             }
-            stepDesc = "Checking new edge: " + uName + " - " + std::to_string(neighbor + 1);
+            stepDesc = "Check edge from node " + uName + " to node " + std::to_string(neighbor + 1);
             states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, edgePtr, stepDesc);
-            stepDesc = "Edge doesn't improve the path";
+            stepDesc = "Edge does not improve the path to node " + std::to_string(neighbor + 1);
             if (newValue < shortestRoute[neighbor].first)
             {   
-                stepDesc = ((shortestRoute[neighbor].second == nullptr) ? "Found new node: " : "Found better path to ");
+                stepDesc = ((shortestRoute[neighbor].second == nullptr) ? "Found node " : "Found better path to node ");
                 stepDesc += std::to_string(neighbor + 1);
 
                 q.erase(std::make_pair(shortestRoute[neighbor].first, neighbor));
@@ -137,10 +137,10 @@ std::vector<ShortestPathEdgeWeightDijkstraState>
             states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, edgePtr, stepDesc);
             firstEdge = false;
         }
-        states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, noEdge, "Finshed processing " + uName);
+        states.emplace_back(shortestRoute, q, closedNodes, processedEdges, u, noEdge, "Finshed processing node " + uName);
         closedNodes.emplace(*begin(q));
         q.erase(begin(q));
-        states.emplace_back(shortestRoute, q, closedNodes, processedEdges, -1, noEdge, "No more edges, " + uName + " is now closed");
+        states.emplace_back(shortestRoute, q, closedNodes, processedEdges, -1, noEdge, "No more edges, node " + uName + " is now closed");
     }
         
     states.emplace_back(shortestRoute, q, closedNodes, processedEdges, -1, noEdge, "Done");
