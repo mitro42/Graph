@@ -111,9 +111,9 @@ public:
 
     void clear(bool newDirected);
 private:
-	bool directed;
-    bool weightedNodes;
-    bool weightedEdges;
+    bool directed;
+    bool weightedNodes = false;
+    bool weightedEdges = true;
 
     std::vector<std::shared_ptr<GraphNode>> nodes;
     std::vector<std::shared_ptr<GraphEdge>> edges;
