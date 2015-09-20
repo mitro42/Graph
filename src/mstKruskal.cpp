@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "mstKruskal.h"
 #include "UnionFind.h"
 
 #include <algorithm>

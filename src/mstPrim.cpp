@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include "mstPrim.h"
 
 /////////////////////////////////////////////////////
 //  PRIM'S MINIMUM SPANNING TREE

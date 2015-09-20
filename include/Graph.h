@@ -1,6 +1,5 @@
-#ifndef MITRO_UTIL_GRAPH_H
-#define MITRO_UTIL_GRAPH_H
-#include "UnionFind.h"
+#ifndef MITRO_GRAPH_H
+#define MITRO_GRAPH_H
 
 #include <algorithm>
 #include <cstdint>
@@ -122,88 +121,5 @@ private:
 
 std::istream &operator>>(std::istream &is, Graph &g);
 std::ostream &operator<<(std::ostream &os, const Graph &g);
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Graph algorithms
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> nodeWeightDijkstra(Graph &g, int startNode, int endNode);
-std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> edgeWeightDijkstra(Graph &g, int startNode, int endNode);
-
-std::vector<GraphEdge> mstPrim(Graph &g, int startNode);
-std::vector<GraphEdge> mstKruskal(Graph &g);
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Algorithms with all intermediate states captured
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace graph_algorithm_capture
-{
-
-struct ShortestPathEdgeWeightDijkstraState
-{
-    std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> path;
-    std::set<std::pair<double, int>> openNodes; // discovered but not fully processed
-    std::set<std::pair<double, int>> closedNodes; //  fully processed
-    std::vector<std::shared_ptr<GraphEdge>> processedEdges; // processed, not part of any of the minimal paths
-    int inspectedNode;
-    std::shared_ptr<GraphEdge> inspectedEdge;
-    std::string description;
-
-    ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> &path,
-        const std::set<std::pair<double, int>> &openNodes,
-        const std::set<std::pair<double, int>> &closedNodes,
-        const std::vector<std::shared_ptr<GraphEdge>> &processedEdges,
-        int inspectedNode,
-        std::shared_ptr<GraphEdge> inspectedEdge,
-        const std::string &description) :
-        path(path),
-        openNodes(openNodes),
-        closedNodes(closedNodes),
-        processedEdges(processedEdges),
-        inspectedNode(inspectedNode),
-        inspectedEdge(inspectedEdge),
-        description(description)
-    {}
-};
-
-std::vector<ShortestPathEdgeWeightDijkstraState>
-edgeWeightDijkstraCaptureStates(Graph &g, int startNode, int endNode);
-
-
-
-struct MstKruskalState
-{
-    std::vector<GraphEdge> mst;
-    std::vector<GraphEdge> edges;
-    UnionFind uf;
-    GraphEdge inspectedEdge;
-    MstKruskalState(const std::vector<GraphEdge> mst, const std::vector<GraphEdge> &edges, const UnionFind &uf, const GraphEdge &inspectedEdge) :
-        mst(mst),
-        edges(edges),
-        uf(uf),
-        inspectedEdge(inspectedEdge)
-    {}
-};
-
-std::vector<MstKruskalState> mstKruskalCaptureStates(Graph &g);
-
-
-
-struct MstPrimState
-{
-    std::vector<GraphEdge> mst;
-    std::vector<bool> visited;
-    std::vector<GraphEdge> inspectedEdges;
-    std::set<GraphEdge> edges;
-    MstPrimState(const std::vector<GraphEdge> &mst, const std::vector<bool> &visited, const std::vector<GraphEdge> &inspectedEdges, const std::set<GraphEdge> &edges) :
-        mst(mst), 
-        visited(visited), 
-        inspectedEdges(inspectedEdges),
-        edges(edges) 
-    {}
-};
-
-std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode);
-} // graph_algorithm_capture
 
 #endif // MITRO_UTIL_GRAPH_H

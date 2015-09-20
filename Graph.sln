@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Util", "Util.vcxproj", "{9A1114F1-4804-42D6-BA57-FF54A2635AC9}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{E5809477-4792-46B2-81EE-F987AD17A201}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Graph", "Graph.vcxproj", "{9A1114F1-4804-42D6-BA57-FF54A2635AC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		{9A1114F1-4804-42D6-BA57-FF54A2635AC9}.Debug|x64.Build.0 = Debug|x64
 		{9A1114F1-4804-42D6-BA57-FF54A2635AC9}.Release|x64.ActiveCfg = Release|x64
 		{9A1114F1-4804-42D6-BA57-FF54A2635AC9}.Release|x64.Build.0 = Release|x64
-		{E5809477-4792-46B2-81EE-F987AD17A201}.Debug|x64.ActiveCfg = Debug|x64
-		{E5809477-4792-46B2-81EE-F987AD17A201}.Debug|x64.Build.0 = Debug|x64
-		{E5809477-4792-46B2-81EE-F987AD17A201}.Release|x64.ActiveCfg = Release|x64
-		{E5809477-4792-46B2-81EE-F987AD17A201}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

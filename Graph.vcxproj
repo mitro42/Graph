@@ -11,24 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BigInt.cpp" />
-    <ClCompile Include="src\ContinuedFractions.cpp" />
     <ClCompile Include="src\Graph.cpp" />
-    <ClCompile Include="src\Helper.cpp" />
     <ClCompile Include="src\mstKruskal.cpp" />
     <ClCompile Include="src\mstPrim.cpp" />
-    <ClCompile Include="src\numerical.cpp" />
-    <ClCompile Include="src\Primes.cpp" />
     <ClCompile Include="src\shortestPathDijkstra.cpp" />
     <ClCompile Include="src\UnionFind.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\BigInt.h" />
-    <ClInclude Include="include\ContinuedFraction.h" />
     <ClInclude Include="include\Graph.h" />
-    <ClInclude Include="include\Helper.h" />
-    <ClInclude Include="include\numerical.h" />
-    <ClInclude Include="include\Primes.h" />
+    <ClInclude Include="include\mstKruskal.h" />
+    <ClInclude Include="include\mstPrim.h" />
+    <ClInclude Include="include\shortestPathDijkstra.h" />
     <ClInclude Include="include\UnionFind.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
