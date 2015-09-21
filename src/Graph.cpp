@@ -89,6 +89,7 @@ void Graph::clear(bool newDirected)
 {
     directed = newDirected;
     nodes.clear();
+    edges.clear();
 }
 
 
