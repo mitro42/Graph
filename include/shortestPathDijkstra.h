@@ -13,20 +13,20 @@ namespace graph_algorithm_capture
 {
     struct ShortestPathEdgeWeightDijkstraState
     {
-        std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> path;
+        std::vector<std::pair<double, const GraphEdge*>> path;
         std::set<std::pair<double, int>> openNodes; // discovered but not fully processed
         std::set<std::pair<double, int>> closedNodes; //  fully processed
-        std::vector<std::shared_ptr<GraphEdge>> processedEdges; // processed, not part of any of the minimal paths
+        std::vector<const GraphEdge *> processedEdges; // processed, not part of any of the minimal paths
         int inspectedNode;
-        std::shared_ptr<GraphEdge> inspectedEdge;
+        const GraphEdge * inspectedEdge;
         std::string description;
 
-        ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, std::shared_ptr<GraphEdge>>> &path,
+        ShortestPathEdgeWeightDijkstraState(const std::vector<std::pair<double, const GraphEdge*>> &path,
             const std::set<std::pair<double, int>> &openNodes,
             const std::set<std::pair<double, int>> &closedNodes,
-            const std::vector<std::shared_ptr<GraphEdge>> &processedEdges,
+            const std::vector<const GraphEdge*> &processedEdges,
             int inspectedNode,
-            std::shared_ptr<GraphEdge> inspectedEdge,
+            const GraphEdge* inspectedEdge,
             const std::string &description) :
             path(path),
             openNodes(openNodes),
