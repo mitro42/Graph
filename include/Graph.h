@@ -26,6 +26,17 @@ struct GraphEdge
     }
 };
 
+struct EdgePtrCompare
+{
+    bool operator() (const GraphEdge* lhs, const GraphEdge* rhs)
+    {
+        return *lhs < *rhs;
+    }
+};
+
+typedef std::set<const GraphEdge*, EdgePtrCompare> EdgePtrSet;
+typedef std::vector<const GraphEdge*> EdgePtrVector;
+
 
 class GraphNode //: public GraphNode
 {
