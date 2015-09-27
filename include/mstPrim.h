@@ -13,15 +13,25 @@ namespace graph_algorithm_capture
 {
     struct MstPrimState
     {
-        std::vector<GraphEdge> mst;
+        EdgePtrVector mst;
+        EdgePtrVector nonMst;
         std::vector<bool> visited;
-        std::vector<GraphEdge> inspectedEdges;
-        std::set<GraphEdge> edges;
-        MstPrimState(const std::vector<GraphEdge> &mst, const std::vector<bool> &visited, const std::vector<GraphEdge> &inspectedEdges, const std::set<GraphEdge> &edges) :
+        EdgePtrVector inspectedEdges;
+        EdgePtrSet edges;
+        std::string description;
+
+        MstPrimState(const EdgePtrVector &mst,
+            const EdgePtrVector &nonMst,
+            const std::vector<bool> &visited, 
+            const EdgePtrVector &inspectedEdges,
+            const EdgePtrSet &edges,
+            const std::string &description) :
             mst(mst),
+            nonMst(nonMst),
             visited(visited),
             inspectedEdges(inspectedEdges),
-            edges(edges)
+            edges(edges),
+            description(description)
         {}
     };
 

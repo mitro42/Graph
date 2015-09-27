@@ -51,51 +51,62 @@ std::vector<GraphEdge> mstPrim(Graph &g, int startNode)
 }
 
 
+
+
 namespace graph_algorithm_capture
 {
 
 std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode)
 {
+    
+
     std::vector<MstPrimState> states;
 
-    std::vector<GraphEdge> mst;
     if (g.getNodeCount() == 0)
         return states;
-    std::vector<bool> visited(g.getNodeCount(), false);
-    std::set<GraphEdge> edges;
-    const std::vector<GraphEdge> noEdges;
 
-    states.emplace_back(mst, visited, noEdges, edges);
+    EdgePtrVector mst;
+    EdgePtrVector nonMst;
+    std::vector<bool> visited(g.getNodeCount(), false);
+    EdgePtrSet edges;
+    const EdgePtrVector noEdges;
+
+    states.emplace_back(mst, nonMst, visited, noEdges, edges, "Start");
 
     visited[startNode] = true;
     auto &node = g.getNode(startNode);
-    std::vector<GraphEdge> addedEdges;
+    EdgePtrVector addedEdges;
     for (auto &edgePtr : node)
     {
-        edges.emplace(*edgePtr);
-        addedEdges.push_back(*edgePtr);
+        edges.emplace(edgePtr.get());
+        addedEdges.push_back(edgePtr.get());
     }
-    states.emplace_back(mst, visited, addedEdges, edges);
-    states.emplace_back(mst, visited, noEdges, edges);
+    states.emplace_back(mst, nonMst, visited, addedEdges, edges, "Remember edges of node " + std::to_string(startNode+1));
+    states.emplace_back(mst, nonMst, visited, noEdges, edges, "");
     int nodeCount = 1;
-
+    std::string stepDesc;
     while (nodeCount != g.getNodeCount() && !edges.empty())
     {
-        GraphEdge nextEdge = *edges.begin();
+        const GraphEdge *nextEdge = *(edges.begin());
         edges.erase(edges.begin());
-        states.emplace_back(mst, visited, std::vector<GraphEdge>{nextEdge}, edges);
-        states.emplace_back(mst, visited, noEdges, edges);
-        if (visited[nextEdge.from] && visited[nextEdge.to])
+        stepDesc = "Check edge between node " + std::to_string(nextEdge->from + 1) + " and node " + std::to_string(nextEdge->to + 1);
+        states.emplace_back(mst, nonMst, visited, std::vector<const GraphEdge*>{nextEdge}, edges, stepDesc);
+        if (visited[nextEdge->from] && visited[nextEdge->to])
+        {
+            nonMst.push_back(nextEdge);
+            states.emplace_back(mst, nonMst, visited, std::vector<const GraphEdge*>{nextEdge}, edges, "Both nodes are already in the MST");
+            states.emplace_back(mst, nonMst, visited, noEdges, edges, "Edge is not part of the MST");
             continue;
-        if (!visited[nextEdge.from] && !visited[nextEdge.to])
+        }
+        if (!visited[nextEdge->from] && !visited[nextEdge->to])
             throw("Edge is not connected to MST");
 
-        int newNode = nextEdge.from;
+        int newNode = nextEdge->from;
         if (visited[newNode])
-            newNode = nextEdge.to;
+            newNode = nextEdge->to;
         mst.push_back(nextEdge);
-        states.pop_back();  // remove the state when the edge is already removed from edges and not yet added to mst
-        states.emplace_back(mst, visited, noEdges, edges);
+        //states.pop_back();  // remove the state when the edge is already removed from edges and not yet added to mst
+        states.emplace_back(mst, nonMst, visited, noEdges, edges, "Add edge to MST");
         visited[newNode] = true;
         auto &node = g.getNode(newNode);
         addedEdges.clear();
@@ -104,14 +115,22 @@ std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode)
         {
             if (visited[edgePtr->otherEnd(newNode)])
                 continue;
-            edges.emplace(*edgePtr);
-            addedEdges.push_back(*edgePtr);
+            edges.emplace(edgePtr.get());
+            addedEdges.push_back(edgePtr.get());
         }
-        states.emplace_back(mst, visited, addedEdges, edges);
-        states.emplace_back(mst, visited, noEdges, edges);
+        states.emplace_back(mst, nonMst, visited, addedEdges, edges, "Remember edges of node " + std::to_string(newNode + 1));
+        states.emplace_back(mst, nonMst, visited, noEdges, edges, "");
         nodeCount++;
     }
-    states.emplace_back(mst, visited, noEdges, std::set<GraphEdge>());
+    
+    stepDesc = (nodeCount == g.getNodeCount()) ? "Reached all nodes" : "Processed all edges";
+    states.emplace_back(mst, nonMst, visited, noEdges, edges, stepDesc);
+
+    for (const auto &edge : edges)
+    {
+        nonMst.push_back(edge);
+    }
+    states.emplace_back(mst, nonMst, visited, noEdges, EdgePtrSet(), "Done");
     return states;
 }
 
