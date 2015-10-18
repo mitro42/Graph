@@ -10,6 +10,7 @@ public:
     int root(int idx);
     void join(int a, int b);
     bool same(int a, int b);
+    int getWeight(int a);
 private:
     std::vector<int> id;
     std::vector<int> weight;

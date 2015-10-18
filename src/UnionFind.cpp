@@ -34,3 +34,9 @@ bool UnionFind::same(int a, int b)
 {
     return root(a) == root(b);
 }
+
+
+int UnionFind::getWeight(int a)
+{
+    return weight[root(a)];
+}
