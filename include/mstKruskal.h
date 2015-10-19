@@ -14,16 +14,12 @@ namespace graph_algorithm_capture
 {
     struct MstKruskalState
     {
-        std::vector<GraphEdge> mst;
-        std::vector<GraphEdge> edges;
+        EdgePtrVector mst;
+        EdgePtrVector notMst;
+        EdgePtrSet notProcessed;
         UnionFind uf;
-        GraphEdge inspectedEdge;
-        MstKruskalState(const std::vector<GraphEdge> mst, const std::vector<GraphEdge> &edges, const UnionFind &uf, const GraphEdge &inspectedEdge) :
-            mst(mst),
-            edges(edges),
-            uf(uf),
-            inspectedEdge(inspectedEdge)
-        {}
+        const GraphEdge *inspectedEdge;
+        std::string description;
     };
 
     std::vector<MstKruskalState> mstKruskalCaptureStates(Graph &g);
