@@ -3,12 +3,13 @@
 
 #include "Graph.h"
 #include "UnionFind.h"
+#include "gsl.h"
 
 /////////////////////////////////////////////////////
 //  KRUSKAL'S MINIMUM SPANNING TREE 
 /////////////////////////////////////////////////////
 
-std::vector<GraphEdge> mstKruskal(Graph &g);
+std::vector<gsl::not_null<GraphEdge*>> mstKruskal(Graph &g);
 
 namespace graph_algorithm_capture
 {

@@ -17,9 +17,9 @@ std::vector<GraphEdge> mstPrim(Graph &g, int startNode)
 
     visited[startNode] = true;
     auto &node = g.getNode(startNode);
-    for (auto &edgePtr: node)
+    for (auto &edge: node)
     {
-        edges.emplace(*edgePtr);
+        edges.insert(edge);
     }
     int nodeCount = 1;
 
@@ -38,11 +38,11 @@ std::vector<GraphEdge> mstPrim(Graph &g, int startNode)
         mst.push_back(nextEdge);
         visited[newNode] = true;
         auto &node = g.getNode(newNode);
-        for (auto &edgePtr : node)
+        for (auto &edge : node)
         {
-            if (visited[edgePtr->otherEnd(newNode)])
+            if (visited[edge.otherEnd(newNode)])
                 continue;
-            edges.emplace(*edgePtr);
+            edges.insert(edge);
         }
         nodeCount++;
     }
@@ -76,10 +76,10 @@ std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode)
     visited[startNode] = true;
     auto &node = g.getNode(startNode);
     EdgePtrVector addedEdges;
-    for (auto &edgePtr : node)
+    for (auto &edge : node)
     {
-        edges.emplace(edgePtr.get());
-        addedEdges.push_back(edgePtr.get());
+        edges.insert(&edge);
+        addedEdges.push_back(&edge);
     }
     states.emplace_back(mst, nonMst, visited, addedEdges, edges, "Remember edges of node " + std::to_string(startNode+1));
     states.emplace_back(mst, nonMst, visited, noEdges, edges, "");
@@ -87,14 +87,14 @@ std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode)
     std::string stepDesc;
     while (nodeCount != g.getNodeCount() && !edges.empty())
     {
-        const GraphEdge *nextEdge = *(edges.begin());
+        GraphEdge *nextEdge = *(edges.begin());
         edges.erase(edges.begin());
         stepDesc = "Check edge between node " + std::to_string(nextEdge->from + 1) + " and node " + std::to_string(nextEdge->to + 1);
-        states.emplace_back(mst, nonMst, visited, std::vector<const GraphEdge*>{nextEdge}, edges, stepDesc);
+        states.emplace_back(mst, nonMst, visited, std::vector<GraphEdge*>{nextEdge}, edges, stepDesc);
         if (visited[nextEdge->from] && visited[nextEdge->to])
         {
             nonMst.push_back(nextEdge);
-            states.emplace_back(mst, nonMst, visited, std::vector<const GraphEdge*>{nextEdge}, edges, "Both nodes are already in the MST");
+            states.emplace_back(mst, nonMst, visited, std::vector<GraphEdge*>{nextEdge}, edges, "Both nodes are already in the MST");
             states.emplace_back(mst, nonMst, visited, noEdges, edges, "Edge is not part of the MST");
             continue;
         }
@@ -111,12 +111,12 @@ std::vector<MstPrimState> mstPrimCaptureStates(Graph &g, int startNode)
         auto &node = g.getNode(newNode);
         addedEdges.clear();
 
-        for (auto &edgePtr : node)
+        for (auto &edge : node)
         {
-            if (visited[edgePtr->otherEnd(newNode)])
+            if (visited[edge.otherEnd(newNode)])
                 continue;
-            edges.emplace(edgePtr.get());
-            addedEdges.push_back(edgePtr.get());
+            edges.insert(&edge);
+            addedEdges.push_back(&edge);
         }
         states.emplace_back(mst, nonMst, visited, addedEdges, edges, "Remember edges of node " + std::to_string(newNode + 1));
         states.emplace_back(mst, nonMst, visited, noEdges, edges, "");

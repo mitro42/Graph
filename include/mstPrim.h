@@ -1,6 +1,7 @@
 #ifndef MITRO_GRAPH_MST_PRIM_H
 #define  MITRO_GRAPH_MST_PRIM_H
 #include "Graph.h"
+#include "gsl.h"
 
 /////////////////////////////////////////////////////
 //  PRIM'S MINIMUM SPANNING TREE

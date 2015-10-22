@@ -7,32 +7,31 @@
 //  KRUSKAL'S MINIMUM SPANNING TREE 
 /////////////////////////////////////////////////////
 
-std::vector<GraphEdge> mstKruskal(Graph &g)
+std::vector<gsl::not_null<GraphEdge*>> mstKruskal(Graph &g)
 {
-    std::vector<GraphEdge> mst;
+    std::vector<gsl::not_null<GraphEdge*>> mst;
     if (g.getNodeCount() == 0)
         return mst;
 
     UnionFind uf(int(g.getNodeCount()));
-    std::vector<GraphEdge> edges;
+    std::vector<gsl::not_null<GraphEdge*>> edges;
 
-    for (int idx = 0; idx < g.getNodeCount(); ++idx)
+    for (auto &node: g)
     {
-        auto &node = g.getNode(idx);
         for (auto &edgePtr: node)
         {
-            edges.emplace_back(*edgePtr);
+            edges.push_back(&edgePtr);
         }
     }
-    std::sort(begin(edges), end(edges), [](const GraphEdge &l, const GraphEdge &r) { return l.weight < r.weight; });
+    std::sort(begin(edges), end(edges), [](gsl::not_null<GraphEdge*> l, gsl::not_null<GraphEdge*> r) { return l->weight < r->weight; });
     
     for (size_t i = 0; i < edges.size(); ++i)
     {
-        GraphEdge &nextEdge = edges[i];
-        if (uf.same(nextEdge.from, nextEdge.to))
+        gsl::not_null<GraphEdge*> nextEdge = edges[i];
+        if (uf.same(nextEdge->from, nextEdge->to))
             continue;
 
-        uf.join(nextEdge.from, nextEdge.to);
+        uf.join(nextEdge->from, nextEdge->to);
         mst.push_back(nextEdge);
     }
 
@@ -55,15 +54,7 @@ std::vector<MstKruskalState> mstKruskalCaptureStates(Graph &g)
     EdgePtrSet notProcessed;
     EdgePtrVector notMst;
 
-
-    for (int idx = 0; idx < g.getNodeCount(); ++idx)
-    {
-        auto &node = g.getNode(idx);
-        for (auto &edgePtr : node)
-        {
-            notProcessed.insert(edgePtr.get());
-        }
-    }
+    std::for_each(g.edges_begin(), g.edges_end(), [&](GraphEdge &e){ notProcessed.insert(&e); });
 
     states.emplace_back(MstKruskalState{ mst, notMst, notProcessed, uf, nullptr, "Start" });
     while (!notProcessed.empty())
@@ -76,7 +67,7 @@ std::vector<MstKruskalState> mstKruskalCaptureStates(Graph &g)
             break;
         }
 
-        const GraphEdge *nextEdge = *notProcessed.begin();
+        GraphEdge *nextEdge = *notProcessed.begin();
         notProcessed.erase(notProcessed.begin());
         std::string stepDesc = "Check edge between node " + std::to_string(nextEdge->from + 1) + " and node " + std::to_string(nextEdge->to + 1);
         states.emplace_back(MstKruskalState{ mst, notMst, notProcessed, uf, nextEdge, stepDesc });
