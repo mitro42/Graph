@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\depthFirstSearch.cpp" />
     <ClCompile Include="src\Graph.cpp" />
     <ClCompile Include="src\mstKruskal.cpp" />
     <ClCompile Include="src\mstPrim.cpp" />
@@ -18,6 +19,7 @@
     <ClCompile Include="src\UnionFind.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\depthFirstSearch.h" />
     <ClInclude Include="include\Graph.h" />
     <ClInclude Include="include\mstKruskal.h" />
     <ClInclude Include="include\mstPrim.h" />

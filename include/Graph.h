@@ -89,8 +89,8 @@ class GraphNode
 {
 public:
 	friend class Graph;
-    using node_iterator = basic_graph_iterator<GraphEdge, gsl::not_null<GraphEdge*>, false>;
-    using const_node_iterator = basic_graph_iterator<GraphEdge, gsl::not_null<GraphEdge*>, true>;
+    using edge_iterator  = basic_graph_iterator<GraphEdge, gsl::not_null<GraphEdge*>, false>;
+    using const_edge_iterator = basic_graph_iterator<GraphEdge, gsl::not_null<GraphEdge*>, true>;
 
     GraphNode(double weight = 0.0): weight(weight) {};
 	~GraphNode() = default;
@@ -101,13 +101,14 @@ public:
     void setWeight(double w) { weight = w; }
     double getWeight() const { return weight; }
 
-    const_node_iterator begin() const { return const_node_iterator{edges.begin()}; }
-    const_node_iterator end() const { return const_node_iterator{edges.end()}; }
+	const_edge_iterator begin() const { return const_edge_iterator{ edges.begin() }; }
+	const_edge_iterator end() const { return const_edge_iterator{ edges.end() }; }
 
-    node_iterator begin() { return node_iterator{ edges.begin() }; }
-    node_iterator end() { return node_iterator{ edges.end() }; }
+	edge_iterator begin() { return edge_iterator{ edges.begin() }; }
+	edge_iterator end() { return edge_iterator{ edges.end() }; }
 
-    int getNeighborCount() const { return int(edges.size()); }
+    int getEdgeCount() const { return int(edges.size()); }
+	const GraphEdge& getEdge(int idx) const { return *edges[idx]; }
 private:
     void addEdge(gsl::not_null<GraphEdge*> edge) { edges.push_back(edge); }
     void removeEdge(gsl::not_null<GraphEdge*> edge) { edges.erase(std::remove(edges.begin(), edges.end(), edge), edges.end()); }
